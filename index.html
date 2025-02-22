@@ -3,68 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lith Store - تحميل الألعاب</title>
+    <title>لعبة تخمين الرقم</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            font-size: 24px;
-        }
-        .game-list {
+            background-color: #f7f7f7;
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            text-align: center;
+            background-color: #fff;
             padding: 20px;
-        }
-        .game {
-            background: white;
-            margin: 10px;
-            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
-        .game img {
-            width: 100%;
-            border-radius: 5px;
-        }
-        .download-btn {
-            display: block;
-            margin-top: 10px;
+        input[type="number"] {
             padding: 10px;
-            background-color: #28a745;
+            font-size: 16px;
+            width: 50%;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .correct {
+            color: green;
+        }
+        .too-high, .too-low {
+            color: red;
         }
     </style>
 </head>
 <body>
-    <div class="header">Lith Store - تحميل الألعاب</div>
-    <div class="game-list">
-        <div class="game">
-            <img src="game1.jpg" alt="لعبة 1">
-            <h3>لعبة المغامرات</h3>
-            <a href="#" class="download-btn">تحميل</a>
-        </div>
-        <div class="game">
-            <img src="game2.jpg" alt="لعبة 2">
-            <h3>لعبة الأكشن</h3>
-            <a href="#" class="download-btn">تحميل</a>
-        </div>
-        <div class="game">
-            <img src="game3.jpg" alt="لعبة 3">
-            <h3>لعبة السباق</h3>
-            <a href="#" class="download-btn">تحميل</a>
-        </div>
+    <div class="game-container">
+        <h1>لعبة تخمين الرقم</h1>
+        <p>اختر رقمًا بين 1 و 100 وحاول تخمينه!</p>
+        <input type="number" id="guess" min="1" max="100" placeholder="أدخل تخمينك">
+        <button onclick="checkGuess()">تخمين</button>
+        <div id="message" class="message"></div>
     </div>
+
+    <script>
+        // توليد رقم عشوائي بين 1 و 100
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById('guess').value);
+            const messageElement = document.getElementById('message');
+            attempts++;
+
+            if (isNaN(userGuess)) {
+                messageElement.textContent = "يرجى إدخال رقم صحيح!";
+                messageElement.className = "message";
+                return;
+            }
+
+            if (userGuess === randomNumber) {
+                messageElement.textContent = `مبروك! لقد خمّنت الرقم الصحيح وهو ${randomNumber}. تم استخدام ${attempts} محاولات.`;
+                messageElement.className = "message correct";
+            } else if (userGuess > randomNumber) {
+                messageElement.textContent = "الرقم المُدخل أكبر من الرقم الصحيح. حاول مجددًا!";
+                messageElement.className = "message too-high";
+            } else {
+                messageElement.textContent = "الرقم المُدخل أصغر من الرقم الصحيح. حاول مجددًا!";
+                messageElement.className = "message too-low";
+            }
+        }
+    </script>
 </body>
 </html>
