@@ -3,34 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة تجنب العقبات</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        #gameCanvas { background-color: #f0f0f0; }
-        #player { position: absolute; width: 30px; height: 30px; background-color: red; }
-    </style>
+    <title>لعبة تخمين الكلمات</title>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <div id="player"></div>
+    <h2>لعبة تخمين الكلمات</h2>
+    <p>حاول تخمين الكلمة:</p>
+    <p id="hint">_ _ _ _</p>
+    <input type="text" id="guess" placeholder="أدخل حرفًا">
+    <button onclick="checkGuess()">تخمين</button>
+    <p id="message"></p>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const word = "مكتبة"; // الكلمة المطلوب تخمينها
+        let hint = Array(word.length).fill("_");
+        
+        function checkGuess() {
+            let guess = document.getElementById('guess').value;
+            let message = document.getElementById('message');
 
-        const player = document.getElementById('player');
-        let playerX = canvas.width / 2, playerY = canvas.height - 50;
-        let playerSpeed = 5;
-
-        function movePlayer(e) {
-            if (e.key === "ArrowLeft" && playerX > 0) playerX -= playerSpeed;
-            if (e.key === "ArrowRight" && playerX < canvas.width - 30) playerX += playerSpeed;
-            player.style.left = playerX + 'px';
+            if (guess.length === 1) {
+                let found = false;
+                for (let i = 0; i < word.length; i++) {
+                    if (word[i] === guess) {
+                        hint[i] = guess;
+                        found = true;
+                    }
+                }
+                if (found) {
+                    message.textContent = "تخمين صحيح!";
+                } else {
+                    message.textContent = "تخمين خاطئ!";
+                }
+                document.getElementById('hint').textContent = hint.join(" ");
+            } else {
+                message.textContent = "من فضلك أدخل حرفًا واحدًا فقط.";
+            }
         }
-
-        document.addEventListener('keydown', movePlayer);
     </script>
 </body>
 </html>
