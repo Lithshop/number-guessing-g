@@ -1,95 +1,36 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة تخمين الرقم</title>
+    <title>لعبة تجنب العقبات</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .game-container {
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        input[type="number"] {
-            padding: 10px;
-            font-size: 16px;
-            width: 50%;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .message {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-        .correct {
-            color: green;
-        }
-        .too-high, .too-low {
-            color: red;
-        }
+        body { margin: 0; overflow: hidden; }
+        #gameCanvas { background-color: #f0f0f0; }
+        #player { position: absolute; width: 30px; height: 30px; background-color: red; }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>لعبة تخمين الرقم</h1>
-        <p>اختر رقمًا بين 1 و 100 وحاول تخمينه!</p>
-        <input type="number" id="guess" min="1" max="100" placeholder="أدخل تخمينك">
-        <button onclick="checkGuess()">تخمين</button>
-        <div id="message" class="message"></div>
-    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="player"></div>
 
     <script>
-        // توليد رقم عشوائي بين 1 و 100
-        const randomNumber = Math.floor(Math.random() * 100) + 1;
-        let attempts = 0;
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        function checkGuess() {
-            const userGuess = parseInt(document.getElementById('guess').value);
-            const messageElement = document.getElementById('message');
-            attempts++;
+        const player = document.getElementById('player');
+        let playerX = canvas.width / 2, playerY = canvas.height - 50;
+        let playerSpeed = 5;
 
-            if (isNaN(userGuess)) {
-                messageElement.textContent = "يرجى إدخال رقم صحيح!";
-                messageElement.className = "message";
-                return;
-            }
-
-            if (userGuess === randomNumber) {
-                messageElement.textContent = `مبروك! لقد خمّنت الرقم الصحيح وهو ${randomNumber}. تم استخدام ${attempts} محاولات.`;
-                messageElement.className = "message correct";
-            } else if (userGuess > randomNumber) {
-                messageElement.textContent = "الرقم المُدخل أكبر من الرقم الصحيح. حاول مجددًا!";
-                messageElement.className = "message too-high";
-            } else {
-                messageElement.textContent = "الرقم المُدخل أصغر من الرقم الصحيح. حاول مجددًا!";
-                messageElement.className = "message too-low";
-            }
+        function movePlayer(e) {
+            if (e.key === "ArrowLeft" && playerX > 0) playerX -= playerSpeed;
+            if (e.key === "ArrowRight" && playerX < canvas.width - 30) playerX += playerSpeed;
+            player.style.left = playerX + 'px';
         }
+
+        document.addEventListener('keydown', movePlayer);
     </script>
 </body>
 </html>
