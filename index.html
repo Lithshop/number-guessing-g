@@ -1,44 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة تخمين الكلمات</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لعبة تخمين الرقم</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 60%;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-    <h2>لعبة تخمين الكلمات</h2>
-    <p>حاول تخمين الكلمة:</p>
-    <p id="hint">_ _ _ _</p>
-    <input type="text" id="guess" placeholder="أدخل حرفًا">
-    <button onclick="checkGuess()">تخمين</button>
-    <p id="message"></p>
+  <div class="container">
+    <h2>لعبة تخمين الرقم</h2>
+    <p>اختر رقمًا بين 1 و 100</p>
+    <input type="number" id="guess" placeholder="أدخل رقمك هنا">
+    <br>
+    <button onclick="guessNumber()">تخمين</button>
+    <p id="result"></p>
+  </div>
 
-    <script>
-        const word = "مكتبة"; // الكلمة المطلوب تخمينها
-        let hint = Array(word.length).fill("_");
-        
-        function checkGuess() {
-            let guess = document.getElementById('guess').value;
-            let message = document.getElementById('message');
+  <script>
+    // توليد رقم عشوائي بين 1 و100
+    const secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
 
-            if (guess.length === 1) {
-                let found = false;
-                for (let i = 0; i < word.length; i++) {
-                    if (word[i] === guess) {
-                        hint[i] = guess;
-                        found = true;
-                    }
-                }
-                if (found) {
-                    message.textContent = "تخمين صحيح!";
-                } else {
-                    message.textContent = "تخمين خاطئ!";
-                }
-                document.getElementById('hint').textContent = hint.join(" ");
-            } else {
-                message.textContent = "من فضلك أدخل حرفًا واحدًا فقط.";
-            }
-        }
-    </script>
+    function guessNumber() {
+      const guessInput = document.getElementById('guess');
+      const result = document.getElementById('result');
+      const guess = Number(guessInput.value);
+      attempts++;
+
+      if (guess === secretNumber) {
+        result.textContent = `أحسنت! لقد خمّنت الرقم الصحيح ${secretNumber} بعد ${attempts} محاولة.`;
+      } else if (guess < secretNumber) {
+        result.textContent = "الرقم أكبر! حاول مرة أخرى.";
+      } else if (guess > secretNumber) {
+        result.textContent = "الرقم أصغر! حاول مرة أخرى.";
+      }
+    }
+  </script>
 </body>
 </html>
